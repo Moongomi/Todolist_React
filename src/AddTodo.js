@@ -7,7 +7,6 @@ const AddTodo = (props) => {
 
   const onInputChange = (event) =>{
     setItem({title: event.target.value});
-    console.log(item);
   };
 
   const onButtonClick = () =>{

@@ -24,6 +24,7 @@ function App() {
     .then((res)=>{
       setItems(res.data);
       setLoading(false);
+      console.log('read item with duedate',res.data);
     });
   },[]);
 
