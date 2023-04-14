@@ -1,23 +1,20 @@
 import './App.css';
-import Todo from "./Todo";
+import Todo from "./component/Todo";
 import React, {useEffect, useState} from "react";
 import { Paper,List, Container,Grid,Button,AppBar,Toolbar,Typography } from '@mui/material';
-import AddTodo from './AddTodo';
+import AddTodo from './component/AddTodo';
+import RandomTodo from './component/RandomTodo';
 import {call,signout} from "./service/ApiService";
-import Loading from './Loading';
+import Loading from './component/Loading';
+import { useNavigate  } from "react-router-dom";
 
 function App() {
-  const [items,setItems] = useState([
-    /*
-    {
-    id: "0",
-    title: "Hello World",
-    done: true
-    },
-    */
-  ]);
+  const [items,setItems] = useState([]);
 
   const [loading,setLoading] = useState(true);
+
+  const [randomText, setRandomText] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() =>{
     call("/todo","GET",null)
@@ -30,7 +27,7 @@ function App() {
 
   const addItem = (item) =>{
     call("/todo","POST",item)
-    .then((res)=>setItems(res.data));
+    .then((res)=>{setItems(res.data)});
   };
 
   const deleteItem = (item) =>{
@@ -43,12 +40,25 @@ function App() {
     .then((res)=>setItems(res.data));
   };
 
+  const randomItem = () =>{
+    call("/todo/random","GET",null)
+    .then((res)=>{
+      setRandomText(res);
+      navigate(`/random-todo/${res.title}`);
+    });
+  };
+
   let navigationBar = (
-    <AppBar position="static">
+    <AppBar position="static" enableColorOnDark sx={{ bgcolor: '#001e7c' }}>
       <Toolbar>
         <Grid justifyContent="space-between" container>
           <Grid item>
             <Typography variant='h6'>TodoList</Typography>
+          </Grid>
+          <Grid item>
+            <Button color="inherit" onClick={randomItem} >
+              랜덤
+            </Button>
           </Grid>
           <Grid item>
             <Button color="inherit" onClick={signout}>

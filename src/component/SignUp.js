@@ -1,6 +1,6 @@
 import React from "react";
 import {Grid,Container,TextField,Button,Typography} from "@mui/material";
-import {signup,signin} from "./service/ApiService";
+import {signup,signin} from "../service/ApiService";
 import {Link} from 'react-router-dom';
 
 function SignUp(){
