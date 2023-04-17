@@ -3,9 +3,8 @@ import "./index.css";
 import App from "./App";
 import Login from "./component/Login";
 import SignUp from "./component/SignUp";
-import RandomTodoPage from "./component/RandomTodoPage";
-import RandomTodo from "./component/RandomTodo";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
+import TimerDisplay from "./component/TimerDisplay";
 
 function AppRouter() {
   return (
@@ -15,8 +14,7 @@ function AppRouter() {
           <Route path="/" element={<App />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
-          <Route path="random" element={<RandomTodoPage />} />
-          <Route path="random-todo/:text" element={<RandomTodo />} />
+          <Route path="pomo" element={<TimerDisplay />} />
         </Routes>
       </BrowserRouter>
     </div>

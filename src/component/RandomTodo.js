@@ -1,50 +1,59 @@
-import React, { useState,useEffect } from "react";
-import { Grid, TextField, Button } from "@mui/material";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Grid, TextField, Box, IconButton } from "@mui/material";
 import "./RandomTodo.css";
+import Button from "@mui/joy/Button";
+import { useNavigate } from "react-router-dom";
+import Close from "@mui/icons-material/Close";
+import PropTypes from 'prop-types';
 
 const RandomTodo = (props) => {
-  //const [text, setRandomText] = useState({title: ""});
-  //const text = props.text;
-  const { text } = useParams();
-  console.log('random text 넘어오는지 테스트',text);
-  //const [scroll,setScroll] = useState('out');
-  //const addItem = props.addItem
-  /*
-  useEffect(() => {
-    Splitting();
-    setScroll('in');
-  },[]);
-  */
-/*
-  const onInputChange = (event) =>{
-    setItem({title: event.target.value});
-  };
-
-  const onButtonClick = () =>{
-    addItem(item);
-    setItem({title:""})
+  const navigate = useNavigate();
+  const { pickedRandomItem, closeModal } = props;
+  
+  function redirectToPomo() {
+    navigate("/pomo");
   }
-*/
 
   return (
-    <div className="effect" style={{ background: '#003090' }}>
-    <div className="blocks" >
-      {text}
-    </div>
-    </div>
-    /*
-    <Grid container style={{marginTop: 20}}>
-        <Grid xs={11} md={11} item style={{paddingRight: 16}}>
-            <TextField placeholder="Add Todo" fullWidth onChange={onInputChange} value={item.title} />
-        </Grid>
-        <Grid xs={1} md={1} item>
-            <Button fullWidth style={{height: '100%'}} color="secondary" variant="outlined" onClick={onButtonClick}>
-                +
-            </Button>
-        </Grid>
-    </Grid>*/
+    <Box
+      className="effect"
+      display="flex"
+      style={{ background: "#003090" }}
+      spacing={2}
+      justifyContent="center"
+      alignItems="center"
+      flexDirection="column"
+    >
+      <Box className="blocks" xs={12}>
+        {pickedRandomItem.title}
+      </Box>
+
+      <Box className="buttons" xs={12} style={{ marginTop: "10px" }}>
+        <Button
+          className="pomoButton"
+          variant="soft"
+          color="danger"
+          size="md"
+          onClick={redirectToPomo}
+        >
+          Pomo
+        </Button>
+        <IconButton
+          color="error"
+          size="medium"
+          style={{ background: "#ffffff", marginLeft: "20px" }}
+          onClick={closeModal}
+        >
+          <Close />
+        </IconButton>
+      </Box>
+    </Box>
   );
+};
+
+RandomTodo.propTypes = {
+  pickedRandomItem: PropTypes.object.isRequired,
+  closeModal: PropTypes.func.isRequired,
 };
 
 export default RandomTodo;
