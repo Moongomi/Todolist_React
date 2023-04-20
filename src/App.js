@@ -15,15 +15,16 @@ import AddTodo from "./component/AddTodo";
 import RandomTodo from "./component/RandomTodo";
 import { call, signout } from "./service/ApiService";
 import Loading from "./component/Loading";
-import AppRouter from "./AppRouter";
 import Modal from "react-modal";
+import Pomo from "./component/Pomo";
 
 Modal.setAppElement('#root');
 
 function App() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRandomModalOpen, setIsRandomModalOpen] = useState(false);
+  const [isPomoModalOpen, setIsPomoModalOpen] = useState(false);
   const [pickedRandomItem, setpickedRandomItem] = useState([]);
 
   useEffect(() => {
@@ -48,17 +49,25 @@ function App() {
   };
 
   const randomItem = () => {
-    setIsModalOpen(true);
+    setIsRandomModalOpen(true);
     call("/todo/random", "GET", null).then((res) => {
       setpickedRandomItem(res);
       console.log('random response',res);
     });
   };
 
-  function closeModal() {
-    setIsModalOpen(false);
+  function closeRandomModal() {
+    setIsRandomModalOpen(false);
     setpickedRandomItem([]);
   }
+
+  const openPomoModal = () => {
+    setIsPomoModalOpen(true);
+  };
+
+  const closePomoModal = () => {
+    setIsPomoModalOpen(false);
+  };
 
   let navigationBar = (
     <AppBar position="static" enableColorOnDark sx={{ bgcolor: "#001e7c" }}>
@@ -71,8 +80,11 @@ function App() {
             <Button color="inherit" onClick={randomItem}>
               랜덤
             </Button>
-            <Modal isOpen={isModalOpen} >
-              <RandomTodo pickedRandomItem={pickedRandomItem} closeModal={closeModal} />
+            <Modal isOpen={isRandomModalOpen} closeModal={closeRandomModal}>
+              <RandomTodo items={items} pickedRandomItem={pickedRandomItem} openPomoModal={openPomoModal} closeModal={closeRandomModal} />
+            </Modal>
+            <Modal isOpen={isPomoModalOpen} closeModal={closePomoModal}>
+              <Pomo items={items} pickedRandomItem={pickedRandomItem} closeModal={closePomoModal} />
             </Modal>
           </Grid>
           <Grid item>

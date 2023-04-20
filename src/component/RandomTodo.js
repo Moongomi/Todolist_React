@@ -7,12 +7,12 @@ import Close from "@mui/icons-material/Close";
 import PropTypes from 'prop-types';
 
 const RandomTodo = (props) => {
-  const navigate = useNavigate();
-  const { pickedRandomItem, closeModal } = props;
-  
-  function redirectToPomo() {
-    navigate("/pomo");
-  }
+
+  const { items,pickedRandomItem, openPomoModal,closeModal } = props;
+
+  const handlePomoClick = () => {
+    openPomoModal();
+  };
 
   return (
     <Box
@@ -34,7 +34,7 @@ const RandomTodo = (props) => {
           variant="soft"
           color="danger"
           size="md"
-          onClick={redirectToPomo}
+          onClick={handlePomoClick}
         >
           Pomo
         </Button>
@@ -52,7 +52,7 @@ const RandomTodo = (props) => {
 };
 
 RandomTodo.propTypes = {
-  pickedRandomItem: PropTypes.object.isRequired,
+  openPomoModal: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
 };
 
