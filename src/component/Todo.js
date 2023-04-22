@@ -7,6 +7,7 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Typography,
+  Box,
 } from "@mui/material";
 import Close from "@mui/icons-material/Close";
 import Schedule from "@mui/icons-material/Schedule";
@@ -58,16 +59,28 @@ const Todo = (props) => {
           onChange={editItemEvent}
         />
 
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           <Schedule />
           <Typography
             variant="body2"
             align="justify"
             sx={{ color: "text.secondary", ml: 1 }}
           >
-            {item.daysago === 0 ? "D Day" : item.daysago > 0 ? `D+${item.daysago}` : `D${item.daysago}`}
+            {item.daysago === 0
+              ? "D Day"
+              : item.daysago > 0
+              ? `D+${item.daysago}`
+              : `D${item.daysago}`}
           </Typography>
-        </div>
+
+          <Typography
+            variant="body2"
+            align="justify"
+            sx={{ color: "text.secondary", ml: 1 }}
+          >
+            Spend time : {item.spendtime}s
+          </Typography>
+        </Box>
       </ListItemText>
       <ListItemSecondaryAction>
         <IconButton aria-label="delete" onClick={delItemEvent}>

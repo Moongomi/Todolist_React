@@ -16,7 +16,8 @@ import RandomTodo from "./component/RandomTodo";
 import { call, signout } from "./service/ApiService";
 import Loading from "./component/Loading";
 import Modal from "react-modal";
-import Pomo from "./component/Pomo";
+import PomoControl from "./component/PomoControl";
+
 
 Modal.setAppElement('#root');
 
@@ -26,6 +27,7 @@ function App() {
   const [isRandomModalOpen, setIsRandomModalOpen] = useState(false);
   const [isPomoModalOpen, setIsPomoModalOpen] = useState(false);
   const [pickedRandomItem, setpickedRandomItem] = useState([]);
+ 
 
   useEffect(() => {
     call("/todo", "GET", null).then((res) => {
@@ -84,7 +86,7 @@ function App() {
               <RandomTodo items={items} pickedRandomItem={pickedRandomItem} openPomoModal={openPomoModal} closeModal={closeRandomModal} />
             </Modal>
             <Modal isOpen={isPomoModalOpen} closeModal={closePomoModal}>
-              <Pomo items={items} pickedRandomItem={pickedRandomItem} closeModal={closePomoModal} />
+              <PomoControl items={items} pickedRandomItem={pickedRandomItem} closeModal={closePomoModal} editItem={editItem}/>
             </Modal>
           </Grid>
           <Grid item>

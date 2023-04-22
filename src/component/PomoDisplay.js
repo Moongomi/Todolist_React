@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, TextField, Button, IconButton } from "@mui/material";
+import { Grid, TextField, Button, IconButton, Typography } from "@mui/material";
 import CircularProgress from "@mui/joy/CircularProgress";
 import Box from "@mui/material/Box";
 import useSound from "use-sound";
@@ -12,72 +12,92 @@ import Close from "@mui/icons-material/Close";
 import VolumeUp from "@mui/icons-material/VolumeUp";
 import VolumeOff from "@mui/icons-material/VolumeOff";
 
-const Pomo = (props) => {
+const PomoDisplay = (props) => {
   const { items, pickedRandomItem, closeModal } = props;
-  const [setItems] = useState("");
-  const [selectedValue, setSelectedValue] = useState(pickedRandomItem.title);
-  const [sound,setSound] = useState(1);
-  const [isActive, setIsActive] = useState(false);
-  const [buttonText, setButtonText] = useState('Start');
-  const leftTime = '5:00';
-  const ratio = 40;
+  const [selectedValue, setSelectedValue] = useState(pickedRandomItem);
+  const editItem = props.editItem;
+  const {
+    timerMode,
+    percentage,
+    timeLeft,
+    isActive,
+    setIsActive,
+    buttonText,
+    setButtonText,
+    volume,
+    setVolume,
+    spendSecond,
+    setSpendSecond,
+  } = props;
 
   const [play] = useSound(startSfx, {
     interrupt: true,
-    volume: sound,
+    volume: volume,
   });
   const [pause] = useSound(pauseSfx, {
     interupt: true,
-    volume: sound,
+    volume: volume,
   });
 
   const handleChange = (event) => {
-    setSelectedValue(event.target.value);
+    console.log('handleChange');
+    const newSelected = event.target.value;
+    const selectedItem = items.find((item) => item.id === newSelected);
+    setSelectedValue(selectedItem);
+    console.log('selected value', selectedValue);
+  };
+  const handlePomoClick = (event) => {
+    if (isActive) {
+      pause();
+    } else {
+      play();
+    }
+
+    setButtonText(
+      buttonText === "Start" || buttonText === "Resume" ? "Pause" : "Resume"
+    );
+    setIsActive(!isActive);
   };
 
-  const handlePomoClick = (event)=>{
-    if (isActive) {
-      pause()
-    }
-    else {
-      play()
-    }
-
-    setButtonText( buttonText === 'Start'
-    || buttonText === 'Resume'
-      ? 'Pause'
-      : 'Resume'
-  )
-    setIsActive(!isActive)
+  const handleStopClick = (event) => {
+    selectedValue.spendtime += spendSecond;
+    editItem(selectedValue);
+    setSpendSecond(0);
+    setIsActive(false);
+    setButtonText('Start');
+    window.location.href = "/";
   };
 
   const handleSoundClick = (event) => {
-    setSound((prevVolume) => prevVolume === 0 ? 1 : 0);
+    setVolume((prevVolume) => (prevVolume === 0 ? 1 : 0));
   };
 
   let selectBox = (
     <Box sx={{ marginTop: "20px" }}>
-          <FormControl sx={{ background: "#ffffff", minWidth: 500 }}>
-            <InputLabel id="demo-simple-select-label">Todo</InputLabel>
-            <NativeSelect value={selectedValue} onChange={handleChange}>
-              {items.map((item) => (
-                <option value={item.title} key={item.id}>
-                  {" "}
-                  {item.title}{" "}
-                </option>
-              ))}
-            </NativeSelect>
-          </FormControl>
-        </Box>
+      <FormControl sx={{ background: "#ffffff", minWidth: 500 }}>
+        <InputLabel id="demo-simple-select-label">Todo</InputLabel>
+        <NativeSelect value={selectedValue.id} onChange={handleChange}>
+          {items.map((item) => (
+            <option value={item.id} key={item.id}>
+              {item.title}
+            </option>
+          ))}
+        </NativeSelect>
+      </FormControl>
+    </Box>
   );
 
   return (
     <>
       <div>
         <div className="pomobox" style={{ background: "#ffffff" }}></div>
-        <CircularProgress size="lg" determinate value={ratio} >
-          {leftTime}
+        <CircularProgress size="lg" determinate value={percentage}>
+          {timeLeft}
         </CircularProgress>
+
+        <Typography variant="h6">
+          Choosed Todo : {selectedValue.title}
+        </Typography>
 
         {selectBox}
 
@@ -88,11 +108,21 @@ const Pomo = (props) => {
             color="primary"
             size="md"
             onClick={handlePomoClick}
-            sx={{ background: "#ffffff"}}
+            sx={{ background: "#ffffff" }}
           >
             {buttonText}
           </Button>
-          {sound === 1 ? (
+          <Button
+            className="stopButton"
+            variant="soft"
+            color="primary"
+            size="md"
+            onClick={handleStopClick}
+            sx={{ background: "#ffffff" }}
+          >
+            Stop & Save
+          </Button>
+          {volume === 1 ? (
             <IconButton
               color="error"
               size="medium"
@@ -125,5 +155,4 @@ const Pomo = (props) => {
     </>
   );
 };
-
-export default Pomo;
+export default PomoDisplay;
